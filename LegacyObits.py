@@ -73,9 +73,6 @@ if __name__ == "__main__":
 
     response = urllib2.urlopen(request)
     html = response.read()
-    text_file = open("Output.txt.html", "w")
-    text_file.write(html)
-    text_file.close()
     soup = BeautifulSoup(html, 'html.parser')
 
     #script = soup.find('script', text=re.compile('window\.blog\.data'))
@@ -112,7 +109,7 @@ if __name__ == "__main__":
     Body = Body.encode('ascii','ignore')
     msg = MIMEMultipart('alternative')
     msg['Subject'] = "New Obituaries"
-    msg['From'] = 'noreply@acudea.com'
+    msg['From'] = 'noreply@example.com'
     recipients = []
     parts = args['recipient'].split(',')
     for recipient in parts:
