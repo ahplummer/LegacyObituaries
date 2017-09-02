@@ -1,5 +1,5 @@
 import json
-import urllib2
+from urllib import request
 import argparse
 import sqlite3
 from bs4 import BeautifulSoup
@@ -40,9 +40,9 @@ def HasAlreadyRetrieved(obitID):
     c.execute(sql)
     data=c.fetchall()
     if len(data) == 0:
-        print 'Obit not retrieved yet for: ' + str(obitID)
+        print ('Obit not retrieved yet for: ' + str(obitID))
     else:
-        print 'Obit ALREADY retrieved for: ' + str(obitID)
+        print ('Obit ALREADY retrieved for: ' + str(obitID))
         returnValue = True
 
     return returnValue
@@ -67,11 +67,9 @@ if __name__ == "__main__":
 
     args = vars(parser.parse_args())
     url = args['url']
-    print 'Using: ' + url
-    request = urllib2.Request(url)
+    print ('Using: ' + url)
 
-
-    response = urllib2.urlopen(request)
+    response = request.urlopen(url)
     html = response.read()
     soup = BeautifulSoup(html, 'html.parser')
 
@@ -90,13 +88,13 @@ if __name__ == "__main__":
         o.ImageUrl = entry['node']['photoUrl']
         #throw the candle up
         if o.ImageUrl is None:
-            o.ImageUrl = 'http://ak-static.legacy.net/obituaries/images/prefmiumobit/premiumobit_candle.jpg?v=104.224.0.11811'
+            o.ImageUrl = 'http://ak-static.legacy.net/obituaries/images/premiumobit/premiumobit_candle.jpg?v=105.0.0.11909'
         else:
             o.ImageUrl += 'x?w=168&h=168&option=3&v=1562247837631119400'
         o.ObituaryText =  entry['node']['obituaryNoHtml'].replace('\n', ' ')
         o.Url = 'http://www.legacy.com' + entry['node']['links']['obituaryUrl']['path']
         obits.append(o)
-    print len(obits)
+    print (len(obits))
     Body = 'There are no obits.'
     anyObits = False
     for obit in obits:
@@ -118,8 +116,8 @@ if __name__ == "__main__":
         msg['BCC'] = ", ".join(recipients)
 
     #     # Create the body of the message (a plain-text and an HTML version).
-        text = Body
-        html = Body
+        text = Body.decode('ascii')
+        html = Body.decode('ascii')
     #     # Record the MIME types of both parts - text/plain and text/html.
         part1 = MIMEText(text, 'plain')
         part2 = MIMEText(html, 'html')
